@@ -1,11 +1,13 @@
 import wx
 class VentanaPrincipal(wx.Frame):
-    def __init__(self, parent, est_temp):
+    def __init__(self, parent, est_temp1, num_linea1):
         super().__init__(parent, wx.ID_ANY, "Alma Deliciosa",
                          style=wx.DEFAULT_FRAME_STYLE | wx.MAXIMIZE | wx.STAY_ON_TOP | wx.NO_BORDER | wx.TAB_TRAVERSAL)
         #AQUI DEBES DE PASAR LA TABLA DE EMPLEADOS
         #self.tablaEmployees = tablaEmployees
         self.consulta = ""
+        self.est_temp=est_temp1
+        self.num_linea=num_linea1
         # Estructura para mostrar páginas
         #DEFINIMOS UN ESTILO DE PAGINAS, ESTILO LIBRETA PARA PODER TENER MAS ORGANIZADO NUESTRO PROYECTO
         notebook = wx.Notebook(self,style=wx.NB_BOTTOM)
@@ -60,7 +62,7 @@ class VentanaPrincipal(wx.Frame):
                                     wx.DefaultPosition, wx.DefaultSize, wx.ALIGN_CENTRE)
         imagen = wx.StaticBitmap(panelInicio, wx.ID_ANY, wx.Bitmap('presentacion1.jpg', wx.BITMAP_TYPE_ANY),size=(520, 520))
         #DATOS PARA EL TEXTAREA
-        consultas = u""
+        self.consulta = u""
         self.listaConsultas = wx.TextCtrl(contenedorInferior, style=wx.TE_MULTILINE, pos=(10, 15), size=(538, 70))
         self.aceptarConsulta = wx.Button(contenedorInferior, label="CALLATE PUTA", size=(120, 25), pos=(560, 35))
         szBoton.Add(self.aceptarConsulta)
@@ -70,7 +72,7 @@ class VentanaPrincipal(wx.Frame):
         szInicioPrincipal.Add(contenedorInferior, 2, wx.ALIGN_CENTRE | wx.ALL, 10)
         # CONFIGURAMOS LOS SIZERS
         panelInicio.SetSizer(szInicioPrincipal)
-        self.listaConsultas.Bind(wx.EVT_BUTTON, self.realizarConsulta)#ESTA PARTE NO SE SI ES DE AHUEVO NECESARIA
+        self.aceptarConsulta.Bind(wx.EVT_BUTTON, self.realizarConsulta)#ESTA PARTE NO SE SI ES DE AHUEVO NECESARIA
 
 
     def inicializarPaginas(self, panelActual, contenedorActual, sizerActual, informacion):
@@ -94,95 +96,94 @@ class VentanaPrincipal(wx.Frame):
         print("Consulta seleccionada: " + self.consulta)
         self.aceptarConsulta.Show(True)
     ####################################################################################################################
-    def mostrarSeleccion(self,  est_temp):
-        orden = self.consultas
+    def mostrarSeleccion(self, orden):
         where = orden.split(" ", 1)
         seleccion = []
-        seleccion.append(est_temp[0])
+        seleccion.append(self.est_temp[0])
         if len(where) >= 2:
             k = 1
             if where[k].find(">=") != -1:
                 kaux = where[k].replace(" ", "")
                 var = kaux.split(">=")
                 j = 0
-                while j < len(est_temp[0]):
-                    if est_temp[0][j] == var[0]:
-                        i = 0
-                        while i < len(est_temp)-1:
-                            if est_temp[i][j] >= var[1]:
-                                seleccion.append(est_temp[i])
+                while j < len(self.est_temp[0]):
+                    if self.est_temp[0][j] == var[0]:
+                        i = 1
+                        while i < self.num_linea - 1:
+                            if self.est_temp[i][j] >= var[1]:
+                                seleccion.append(self.est_temp[i])
                             i = i + 1
                     j = j + 1
             elif where[k].find('<=') != -1:
                 kaux = where[k].replace(" ", "")
                 var = kaux.split("<=")
                 j = 0
-                while j < len(est_temp[0]):
-                    if est_temp[0][j] == var[0]:
-                        i = 0
-                        while i < len(est_temp)-1:
-                            if est_temp[i][j] <= var[1]:
-                                seleccion.append(est_temp[i])
+                while j < len(self.est_temp[0]):
+                    if self.est_temp[0][j] == var[0]:
+                        i = 1
+                        while i < self.num_linea - 1:
+                            if self.est_temp[i][j] <= var[1]:
+                                seleccion.append(self.est_temp[i])
                             i = i + 1
                     j = j + 1
             elif where[k].find('<>') != -1:
                 kaux = where[k].replace(" ", "")
                 var = kaux.split("<>")
                 j = 0
-                while j < len(est_temp[0]):
-                    if est_temp[0][j] == var[0]:
-                        i = 0
-                        while i < len(est_temp)-1:
-                            if est_temp[i][j] != var[1]:
-                                seleccion.append(est_temp[i])
+                while j < len(self.est_temp[0]):
+                    if self.est_temp[0][j] == var[0]:
+                        i = 1
+                        while i < self.num_linea - 1:
+                            if self.est_temp[i][j] != var[1]:
+                                seleccion.append(self.est_temp[i])
                             i = i + 1
                     j = j + 1
             elif where[k].find('!=') != -1:
                 kaux = where[k].replace(" ", "")
                 var = kaux.split("!=")
                 j = 0
-                while j < len(est_temp[0]):
-                    if est_temp[0][j] == var[0]:
-                        i = 0
-                        while i < len(est_temp)-1:
-                            if est_temp[i][j] != var[1]:
-                                seleccion.append(est_temp[i])
+                while j < len(self.est_temp[0]):
+                    if self.est_temp[0][j] == var[0]:
+                        i = 1
+                        while i < self.num_linea - 1:
+                            if self.est_temp[i][j] != var[1]:
+                                seleccion.append(self.est_temp[i])
                             i = i + 1
                     j = j + 1
             elif where[k].find('=') != -1:
                 kaux = where[k].replace(" ", "")
                 var = kaux.split("=")
                 j = 0
-                while j < len(est_temp[0]):
-                    if est_temp[0][j] == var[0]:
-                        i = 0
-                        while i < len(est_temp)-1:
-                            if est_temp[i][j] == var[1]:
-                                seleccion.append(est_temp[i])
+                while j < len(self.est_temp[0]):
+                    if self.est_temp[0][j] == var[0]:
+                        i = 1
+                        while i < self.num_linea - 1:
+                            if self.est_temp[i][j] == var[1]:
+                                seleccion.append(self.est_temp[i])
                             i = i + 1
                     j = j + 1
             elif where[k].find('<') != -1:
                 kaux = where[k].replace(" ", "")
                 var = kaux.split("<")
                 j = 0
-                while j < len(est_temp[0]):
-                    if est_temp[0][j] == var[0]:
-                        i = 0
-                        while i < len(est_temp)-1:
-                            if est_temp[i][j] < var[1]:
-                                seleccion.append(est_temp[i])
+                while j < len(self.est_temp[0]):
+                    if self.est_temp[0][j] == var[0]:
+                        i = 1
+                        while i < self.num_linea - 1:
+                            if self.est_temp[i][j] < var[1]:
+                                seleccion.append(self.est_temp[i])
                             i = i + 1
                     j = j + 1
             elif where[k].find('>') != -1:
                 kaux = where[k].replace(" ", "")
                 var = kaux.split(">")
                 j = 0
-                while j < len(est_temp[0]):
-                    if est_temp[0][j] == var[0]:
-                        i = 0
-                        while i < len(est_temp)-1:
-                            if est_temp[i][j] > var[1]:
-                                seleccion.append(est_temp[i])
+                while j < len(self.est_temp[0]):
+                    if self.est_temp[0][j] == var[0]:
+                        i = 1
+                        while i < self.num_linea - 1:
+                            if self.est_temp[i][j] > var[1]:
+                                seleccion.append(self.est_temp[i])
                             i = i + 1
                     j = j + 1
             elif where[k].find('BETWEEN') != -1:
@@ -190,24 +191,24 @@ class VentanaPrincipal(wx.Frame):
                 var = kaux.split("BETWEEN")
                 num = var[1].split("AND")
                 j = 0
-                while j < len(est_temp[0]):
-                    if est_temp[0][j] == var[0]:
-                        i = 0
-                        while i < len(est_temp)-1:
-                            if est_temp[i][j] >= num[0] and est_temp[i][j] <= num[1]:
-                                seleccion.append(est_temp[i])
+                while j < len(self.est_temp[0]):
+                    if self.est_temp[0][j] == var[0]:
+                        i = 1
+                        while i < self.num_linea - 1:
+                            if self.est_temp[i][j] >= num[0] and self.est_temp[i][j] <= num[1]:
+                                seleccion.append(self.est_temp[i])
                             i = i + 1
                     j = j + 1
             elif where[k].find('IS NULL') != -1:
                 kaux = where[k].replace(" ", "")
                 var = kaux.split("ISNULL")
                 j = 0
-                while j < len(est_temp[0]):
-                    if est_temp[0][j] == var[0]:
-                        i = 0
-                        while i < len(est_temp)-1:
-                            if est_temp[i][j] == "":
-                                seleccion.append(est_temp[i])
+                while j < len(self.est_temp[0]):
+                    if self.est_temp[0][j] == var[0]:
+                        i = 1
+                        while i < self.num_linea - 1:
+                            if self.est_temp[i][j] == "":
+                                seleccion.append(self.est_temp[i])
                             i = i + 1
                     j = j + 1
             elif where[k].find('NOT IN') != -1:
@@ -219,18 +220,18 @@ class VentanaPrincipal(wx.Frame):
                 num = var[1].split(" ")
                 print(num)
                 j = 0
-                while j < len(est_temp[0]):
-                    if est_temp[0][j] == var[0]:
-                        i = 0
-                        while i < len(est_temp)-1:
+                while j < len(self.est_temp[0]):
+                    if self.est_temp[0][j] == var[0]:
+                        i = 1
+                        while i < self.num_linea - 1:
                             h = 0
                             band = 0
                             while h < len(num):
-                                if est_temp[i][j] == num[h]:
+                                if self.est_temp[i][j] == num[h]:
                                     band = 1
                                 h = h + 1
                             if band == 0:
-                                seleccion.append(est_temp[i])
+                                seleccion.append(self.est_temp[i])
                             i = i + 1
                     j = j + 1
             elif where[k].find('IN') != -1:
@@ -241,82 +242,109 @@ class VentanaPrincipal(wx.Frame):
                 var[1] = var[1].replace(")", "")
                 num = var[1].split(" ")
                 j = 0
-                while j < len(est_temp[0]):
-                    if est_temp[0][j] == var[0]:
-                        i = 0
-                        while i < len(est_temp)-1:
+                while j < len(self.est_temp[0]):
+                    if self.est_temp[0][j] == var[0]:
+                        i = 1
+                        while i < self.num_linea - 1:
                             h = 0
                             while h < len(num):
-                                if est_temp[i][j] == num[h]:
-                                    seleccion.append(est_temp[i])
+                                if self.est_temp[i][j] == num[h]:
+                                    seleccion.append(self.est_temp[i])
                                 h = h + 1
                             i = i + 1
                     j = j + 1
             k = k + 1
-            i = 0
+            cad_imp = ""
+            i=0
             while i < len(seleccion):
                 j = 0
                 while j < len(seleccion[0]):
                     if (seleccion[i][j] == ""):
-                        print("NULL", end=" ")
+                        cad_imp = cad_imp + "NULL "
                     else:
-                        print(seleccion[i][j], end=" ")
-                        j = j + 1
-                    print("")
-                    i = i + 1
-    def mostrarProyeccion(self,est_temp):
-        orden=self.consultas
+                        cad_imp = cad_imp + seleccion[i][j]
+                        cad_imp = cad_imp + " "
+                    j = j + 1
+                print("")
+                cad_imp = cad_imp + "\n"
+                i = i + 1
+                print(cad_imp)
+                #self.impresion = wx.StaticText(self.contenedorSeleccion, wx.ID_ANY, size=(1120, 500), style=wx.TE_MULTILINE)  # agregar posicion tamaño
+                self.impresion = wx.StaticText(self.contenedorSeleccion, wx.ID_ANY, size=(1120, 500),style=wx.LC_REPORT)
+                self.impresion.SetLabel(cad_imp)
+                # self.szProyeccionPrincipal.Add(self.impresion, 1, wx.EXPAND | wx.ALL, 10)
+                self.szSeleccionPrincipal.SetContainingWindow(self.panelSeleccion)
+                # self.SetSizer(self.szProyeccionPrincipal)
+                self.panelSeleccion.SetSizer(self.szSeleccionPrincipal)
+        else:
+            seleccion = self.est_temp
+
+    def mostrarProyeccion(self, orden):
+        seleccion=self.est_temp
         orden_sin_comas = orden.replace(",", "")
         select = orden_sin_comas.split(" ")
         i = 0
         proyeccion = []
         if len(select) >= 2:
             if select[1] == "*":
-                while i < len(est_temp):
+                cad_imp = ""
+                while i < len(seleccion):
                     j = 0
-                    while j < len(est_temp[i]):
-                        if (est_temp[i][j] == ""):
-                            print("NULL", end=" ")
+                    while j < len(seleccion[i]):
+                        if (seleccion[i][j] == ""):
+                            cad_imp = cad_imp + "NULL "
                         else:
-                            print(est_temp[i][j], end=" ")
+                            cad_imp = cad_imp + seleccion[i][j]
+                            cad_imp = cad_imp + " "
                         j = j + 1
-                    print("")
+                    cad_imp = cad_imp + "\n"
                     i = i + 1
+                print(cad_imp)
+                self.impresion = wx.StaticText(self.contenedorProyeccion, wx.ID_ANY, size=(1120, 500), style=wx.TE_MULTILINE)  # agregar posicion tamaño
+                self.impresion.SetLabel(cad_imp)
+                #self.szProyeccionPrincipal.Add(self.impresion, 1, wx.EXPAND | wx.ALL, 10)
+                self.szProyeccionPrincipal.SetContainingWindow(self.panelProyeccion)
+                #self.SetSizer(self.szProyeccionPrincipal)
+                self.panelProyeccion.SetSizer(self.szSeleccionPrincipal)
             else:
                 k = 1
-                while k < len(est_temp):
+                while k < len(select):
                     i = 1
                     j = 0
-                    while j < len(est_temp[0]):
-                        if est_temp[0][j] == select[k]:
+                    while j < len(seleccion[0]):
+                        if seleccion[0][j] == select[k]:
                             proyeccion.append([])
-                            proyeccion[0].append(est_temp[0][j])
-                            while i < len(est_temp):
+                            proyeccion[0].append(seleccion[0][j])
+                            while i < len(seleccion):
                                 proyeccion.append([])
-                                proyeccion[i].append(est_temp[i][j])
+                                proyeccion[i].append(seleccion[i][j])
                                 i = i + 1
                         j = j + 1
                     k = k + 1
+                cad_imp=""
                 i = 0
-                while i < len(est_temp):
+                while i < len(seleccion):
                     j = 0
                     while j < len(proyeccion[0]):
                         if (proyeccion[i][j] == ""):
-                            print("NULL", end=" ")
+                            cad_imp=cad_imp+"NULL "
                         else:
-                            print(proyeccion[i][j], end=" ")
+                            cad_imp = cad_imp + proyeccion[i][j]
+                            cad_imp=cad_imp+" "
                         j = j + 1
-                    print("")
+                    cad_imp=cad_imp+"\n"
                     i = i + 1
+                print(cad_imp)
+                self.impresion = wx.StaticText(self.contenedorProyeccion,wx.ID_ANY, size=(1120,500), style=wx.TE_MULTILINE)#agregar posicion tamaño
+                self.impresion.SetLabelText(cad_imp)
+                self.szProyeccionPrincipal.Add(self.impresion,1,wx.EXPAND|wx.ALL,10)
+                self.SetSizer(self.szProyeccionPrincipal)
         else:
             print("Faltan argumentos")
     def realizarConsulta(self,event):
         event.Skip()
-        print("HOLA")
-        if self.consultas.find("SELECT"):
-            consultas_sin_comas = self.consultas.replace(",", "")
-            select = consultas_sin_comas.split(" ")
-            self.mostrarProyeccion()
-        elif self.consultas.find("WHERE"):
-            where = self.consultas.split(" ", 1)
-            self.mostrarSeleccion()
+        orden=self.listaConsultas.GetValue()
+        if orden.find("SELECT")!=-1:
+            self.mostrarProyeccion(orden)
+        elif orden.find("WHERE")!=-1:
+            self.mostrarSeleccion(orden)

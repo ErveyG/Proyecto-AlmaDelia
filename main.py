@@ -54,7 +54,7 @@ def main():
     # Genera Aplicación
     app = wx.App()
     # Genera un el Frame principal y le pasa la tabla de empleados
-    ex = VentanaPrincipal(None, est_temp)#(None, tablaEmployees)
+    ex = VentanaPrincipal(None, est_temp, num_linea)#(None, tablaEmployees)
     # Muestra el frame principal
     ex.Show()
     # Pone la aplicacion en loop

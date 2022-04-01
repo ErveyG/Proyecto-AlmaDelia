@@ -211,6 +211,8 @@ if len(where)>=2:
                 j=j+1
             print("")
             i=i+1
+    print("----")
+    print(seleccion)
 
 #Parte del select
 i=0
