@@ -1,6 +1,6 @@
 import wx
 class VentanaPrincipal(wx.Frame):
-    def __init__(self, parent):#(self, parent, tablaEmployees)
+    def __init__(self, parent, est_temp):
         super().__init__(parent, wx.ID_ANY, "Alma Deliciosa",
                          style=wx.DEFAULT_FRAME_STYLE | wx.MAXIMIZE | wx.STAY_ON_TOP | wx.NO_BORDER | wx.TAB_TRAVERSAL)
         #AQUI DEBES DE PASAR LA TABLA DE EMPLEADOS
@@ -70,7 +70,7 @@ class VentanaPrincipal(wx.Frame):
         szInicioPrincipal.Add(contenedorInferior, 2, wx.ALIGN_CENTRE | wx.ALL, 10)
         # CONFIGURAMOS LOS SIZERS
         panelInicio.SetSizer(szInicioPrincipal)
-        self.listaConsultas.Bind(wx.EVT_TEXT_COPY, self.seleccionConsulta)#ESTA PARTE NO SE SI ES DE AHUEVO NECESARIA
+        self.listaConsultas.Bind(wx.EVT_BUTTON, self.realizarConsulta)#ESTA PARTE NO SE SI ES DE AHUEVO NECESARIA
 
 
     def inicializarPaginas(self, panelActual, contenedorActual, sizerActual, informacion):
@@ -94,3 +94,229 @@ class VentanaPrincipal(wx.Frame):
         print("Consulta seleccionada: " + self.consulta)
         self.aceptarConsulta.Show(True)
     ####################################################################################################################
+    def mostrarSeleccion(self,  est_temp):
+        orden = self.consultas
+        where = orden.split(" ", 1)
+        seleccion = []
+        seleccion.append(est_temp[0])
+        if len(where) >= 2:
+            k = 1
+            if where[k].find(">=") != -1:
+                kaux = where[k].replace(" ", "")
+                var = kaux.split(">=")
+                j = 0
+                while j < len(est_temp[0]):
+                    if est_temp[0][j] == var[0]:
+                        i = 0
+                        while i < len(est_temp)-1:
+                            if est_temp[i][j] >= var[1]:
+                                seleccion.append(est_temp[i])
+                            i = i + 1
+                    j = j + 1
+            elif where[k].find('<=') != -1:
+                kaux = where[k].replace(" ", "")
+                var = kaux.split("<=")
+                j = 0
+                while j < len(est_temp[0]):
+                    if est_temp[0][j] == var[0]:
+                        i = 0
+                        while i < len(est_temp)-1:
+                            if est_temp[i][j] <= var[1]:
+                                seleccion.append(est_temp[i])
+                            i = i + 1
+                    j = j + 1
+            elif where[k].find('<>') != -1:
+                kaux = where[k].replace(" ", "")
+                var = kaux.split("<>")
+                j = 0
+                while j < len(est_temp[0]):
+                    if est_temp[0][j] == var[0]:
+                        i = 0
+                        while i < len(est_temp)-1:
+                            if est_temp[i][j] != var[1]:
+                                seleccion.append(est_temp[i])
+                            i = i + 1
+                    j = j + 1
+            elif where[k].find('!=') != -1:
+                kaux = where[k].replace(" ", "")
+                var = kaux.split("!=")
+                j = 0
+                while j < len(est_temp[0]):
+                    if est_temp[0][j] == var[0]:
+                        i = 0
+                        while i < len(est_temp)-1:
+                            if est_temp[i][j] != var[1]:
+                                seleccion.append(est_temp[i])
+                            i = i + 1
+                    j = j + 1
+            elif where[k].find('=') != -1:
+                kaux = where[k].replace(" ", "")
+                var = kaux.split("=")
+                j = 0
+                while j < len(est_temp[0]):
+                    if est_temp[0][j] == var[0]:
+                        i = 0
+                        while i < len(est_temp)-1:
+                            if est_temp[i][j] == var[1]:
+                                seleccion.append(est_temp[i])
+                            i = i + 1
+                    j = j + 1
+            elif where[k].find('<') != -1:
+                kaux = where[k].replace(" ", "")
+                var = kaux.split("<")
+                j = 0
+                while j < len(est_temp[0]):
+                    if est_temp[0][j] == var[0]:
+                        i = 0
+                        while i < len(est_temp)-1:
+                            if est_temp[i][j] < var[1]:
+                                seleccion.append(est_temp[i])
+                            i = i + 1
+                    j = j + 1
+            elif where[k].find('>') != -1:
+                kaux = where[k].replace(" ", "")
+                var = kaux.split(">")
+                j = 0
+                while j < len(est_temp[0]):
+                    if est_temp[0][j] == var[0]:
+                        i = 0
+                        while i < len(est_temp)-1:
+                            if est_temp[i][j] > var[1]:
+                                seleccion.append(est_temp[i])
+                            i = i + 1
+                    j = j + 1
+            elif where[k].find('BETWEEN') != -1:
+                kaux = where[k].replace(" ", "")
+                var = kaux.split("BETWEEN")
+                num = var[1].split("AND")
+                j = 0
+                while j < len(est_temp[0]):
+                    if est_temp[0][j] == var[0]:
+                        i = 0
+                        while i < len(est_temp)-1:
+                            if est_temp[i][j] >= num[0] and est_temp[i][j] <= num[1]:
+                                seleccion.append(est_temp[i])
+                            i = i + 1
+                    j = j + 1
+            elif where[k].find('IS NULL') != -1:
+                kaux = where[k].replace(" ", "")
+                var = kaux.split("ISNULL")
+                j = 0
+                while j < len(est_temp[0]):
+                    if est_temp[0][j] == var[0]:
+                        i = 0
+                        while i < len(est_temp)-1:
+                            if est_temp[i][j] == "":
+                                seleccion.append(est_temp[i])
+                            i = i + 1
+                    j = j + 1
+            elif where[k].find('NOT IN') != -1:
+                kaux = where[k].replace(" ", "")
+                var = kaux.split("NOTIN")
+                var[1] = var[1].replace(",", " ")
+                var[1] = var[1].replace("(", "")
+                var[1] = var[1].replace(")", "")
+                num = var[1].split(" ")
+                print(num)
+                j = 0
+                while j < len(est_temp[0]):
+                    if est_temp[0][j] == var[0]:
+                        i = 0
+                        while i < len(est_temp)-1:
+                            h = 0
+                            band = 0
+                            while h < len(num):
+                                if est_temp[i][j] == num[h]:
+                                    band = 1
+                                h = h + 1
+                            if band == 0:
+                                seleccion.append(est_temp[i])
+                            i = i + 1
+                    j = j + 1
+            elif where[k].find('IN') != -1:
+                kaux = where[k].replace(" ", "")
+                var = kaux.split("IN")
+                var[1] = var[1].replace(",", " ")
+                var[1] = var[1].replace("(", "")
+                var[1] = var[1].replace(")", "")
+                num = var[1].split(" ")
+                j = 0
+                while j < len(est_temp[0]):
+                    if est_temp[0][j] == var[0]:
+                        i = 0
+                        while i < len(est_temp)-1:
+                            h = 0
+                            while h < len(num):
+                                if est_temp[i][j] == num[h]:
+                                    seleccion.append(est_temp[i])
+                                h = h + 1
+                            i = i + 1
+                    j = j + 1
+            k = k + 1
+            i = 0
+            while i < len(seleccion):
+                j = 0
+                while j < len(seleccion[0]):
+                    if (seleccion[i][j] == ""):
+                        print("NULL", end=" ")
+                    else:
+                        print(seleccion[i][j], end=" ")
+                        j = j + 1
+                    print("")
+                    i = i + 1
+    def mostrarProyeccion(self,est_temp):
+        orden=self.consultas
+        orden_sin_comas = orden.replace(",", "")
+        select = orden_sin_comas.split(" ")
+        i = 0
+        proyeccion = []
+        if len(select) >= 2:
+            if select[1] == "*":
+                while i < len(est_temp):
+                    j = 0
+                    while j < len(est_temp[i]):
+                        if (est_temp[i][j] == ""):
+                            print("NULL", end=" ")
+                        else:
+                            print(est_temp[i][j], end=" ")
+                        j = j + 1
+                    print("")
+                    i = i + 1
+            else:
+                k = 1
+                while k < len(est_temp):
+                    i = 1
+                    j = 0
+                    while j < len(est_temp[0]):
+                        if est_temp[0][j] == select[k]:
+                            proyeccion.append([])
+                            proyeccion[0].append(est_temp[0][j])
+                            while i < len(est_temp):
+                                proyeccion.append([])
+                                proyeccion[i].append(est_temp[i][j])
+                                i = i + 1
+                        j = j + 1
+                    k = k + 1
+                i = 0
+                while i < len(est_temp):
+                    j = 0
+                    while j < len(proyeccion[0]):
+                        if (proyeccion[i][j] == ""):
+                            print("NULL", end=" ")
+                        else:
+                            print(proyeccion[i][j], end=" ")
+                        j = j + 1
+                    print("")
+                    i = i + 1
+        else:
+            print("Faltan argumentos")
+    def realizarConsulta(self,event):
+        event.Skip()
+        print("HOLA")
+        if self.consultas.find("SELECT"):
+            consultas_sin_comas = self.consultas.replace(",", "")
+            select = consultas_sin_comas.split(" ")
+            self.mostrarProyeccion()
+        elif self.consultas.find("WHERE"):
+            where = self.consultas.split(" ", 1)
+            self.mostrarSeleccion()

@@ -35,7 +35,6 @@ def leerArchivo():
     est_temp.pop()
     f.close()
     return(num_linea)
-
 #lee el archivo
 num_linea=leerArchivo()
 #parte del where
@@ -46,7 +45,6 @@ orden=input("|")
 where=orden.split(" ",1)
 seleccion=[]
 seleccion.append(est_temp[0])
-
 #verifica que pida una selección, en caso contrario da solo la proyección
 if len(where)>=2:
     k=1
@@ -202,40 +200,50 @@ if len(where)>=2:
                     i=i+1
             j=j+1
     k=k+1
-else:
-    seleccion=est_temp
+    i=0
+    while i<len(seleccion):
+        j=0
+        while j<len(seleccion[0]):
+            if(seleccion[i][j]==""):
+                print("NULL", end=" ")
+            else:
+                print(seleccion[i][j], end=" ")
+                j=j+1
+            print("")
+            i=i+1
+
 #Parte del select
 i=0
 proyeccion=[]
 if len(select)>=2:
     if select[1]=="*":
-        while i<len(seleccion):
+        while i<len(est_temp):
             j=0
-            while j<len(seleccion[i]):
-                if(seleccion[i][j]==""):
+            while j<len(est_temp[i]):
+                if(est_temp[i][j]==""):
                     print("NULL", end=" ")
                 else:
-                    print(seleccion[i][j], end=" ")
+                    print(est_temp[i][j], end=" ")
                 j=j+1
             print("")
             i=i+1
     else:
         k=1
-        while k < len(select):
+        while k < len(est_temp):
             i=1
             j=0
-            while j<len(seleccion[0]):
-                if seleccion[0][j]==select[k]:
+            while j<len(est_temp[0]):
+                if est_temp[0][j]==select[k]:
                     proyeccion.append([])
-                    proyeccion[0].append(seleccion[0][j])
-                    while i < len(seleccion):
+                    proyeccion[0].append(est_temp[0][j])
+                    while i < len(est_temp):
                         proyeccion.append([])
-                        proyeccion[i].append(seleccion[i][j])
+                        proyeccion[i].append(est_temp[i][j])
                         i=i+1
                 j=j+1
             k=k+1
         i=0
-        while i<len(seleccion):
+        while i<len(est_temp):
             j=0
             while j<len(proyeccion[0]):
                 if(proyeccion[i][j]==""):
