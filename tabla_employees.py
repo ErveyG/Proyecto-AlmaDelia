@@ -35,6 +35,7 @@ def leerArchivo():
     est_temp.pop()
     f.close()
     return(num_linea)
+
 #lee el archivo
 num_linea=leerArchivo()
 #parte del where
@@ -45,6 +46,7 @@ orden=input("|")
 where=orden.split(" ",1)
 seleccion=[]
 seleccion.append(est_temp[0])
+
 #verifica que pida una selección, en caso contrario da solo la proyección
 if len(where)>=2:
     k=1
