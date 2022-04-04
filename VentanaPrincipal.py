@@ -247,10 +247,10 @@ class VentanaPrincipal(wx.Frame):
                 j = 0
                 while j < len(seleccion[0]):
                     if (seleccion[i][j] == ""):
-                        cad_imp = cad_imp + "NULL "
+                        cad_imp = cad_imp + "NULL  |  "
                     else:
                         cad_imp = cad_imp + seleccion[i][j]
-                        cad_imp = cad_imp + " "
+                        cad_imp = cad_imp + "  |  "
                     j = j + 1
                 print("")
                 cad_imp = cad_imp + "\n"
@@ -276,10 +276,10 @@ class VentanaPrincipal(wx.Frame):
                     j = 0
                     while j < len(seleccion[i]):
                         if (seleccion[i][j] == ""):
-                            cad_imp = cad_imp + "NULL "
+                            cad_imp = cad_imp + "NULL  |  "
                         else:
                             cad_imp = cad_imp + seleccion[i][j]
-                            cad_imp = cad_imp + " "
+                            cad_imp = cad_imp + "  |  "
                         j = j + 1
                     cad_imp = cad_imp + "\n"
 
@@ -310,10 +310,10 @@ class VentanaPrincipal(wx.Frame):
                     j = 0
                     while j < len(proyeccion[0]):
                         if (proyeccion[i][j] == ""):
-                            cad_imp=cad_imp+"NULL "
+                            cad_imp=cad_imp+"NULL  |  "
                         else:
                             cad_imp = cad_imp + proyeccion[i][j]
-                            cad_imp=cad_imp+" "
+                            cad_imp=cad_imp+"  |  "
                         j = j + 1
                     cad_imp=cad_imp+"\n"
                     i = i + 1
