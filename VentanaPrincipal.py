@@ -1,3 +1,5 @@
+import os
+
 import wx
 class VentanaPrincipal(wx.Frame):
     def __init__(self, parent, est_temp1, num_linea1):
@@ -59,6 +61,9 @@ class VentanaPrincipal(wx.Frame):
         self.consulta = u""
         self.listaConsultas = wx.TextCtrl(contenedorInferior, style=wx.TE_MULTILINE, pos=(15, 15), size=(538, 70))
         self.aceptarConsulta = wx.Button(contenedorInferior, label="ACEPTAR", size=(120, 25), pos=(560, 35))
+        self.limpiarPanel= wx.Button(contenedorInferior, label="LIMPIAR", size=(120, 25), pos=(560, 85))
+
+        szBoton.Add(self.limpiarPanel)
         szBoton.Add(self.aceptarConsulta)
         # AGREGAMOS LOS ELEMENTOS A LOS SIZERS
         szInicioPrincipal.Add(informacion, 1, wx.EXPAND | wx.ALL, 20)
@@ -67,6 +72,7 @@ class VentanaPrincipal(wx.Frame):
         # CONFIGURAMOS LOS SIZERS
         panelInicio.SetSizer(szInicioPrincipal)
         self.aceptarConsulta.Bind(wx.EVT_BUTTON, self.realizarConsulta)#ESTA PARTE NO SE SI ES DE AHUEVO NECESARIA
+        self.limpiarPanel.Bind(wx.EVT_BUTTON, self.realizarLimpieza)
 
 
     def inicializarPaginas(self, panelActual, contenedorActual, sizerActual, informacion):
@@ -260,6 +266,7 @@ class VentanaPrincipal(wx.Frame):
                 self.impresion.AppendText(cad_imp)
                 self.szSeleccionPrincipal.SetContainingWindow(self.panelSeleccion)
                 self.panelSeleccion.SetSizer(self.szSeleccionPrincipal)
+                os.system("pause")
         else:
             seleccion = self.est_temp
 
@@ -322,6 +329,7 @@ class VentanaPrincipal(wx.Frame):
                 self.impresion.AppendText(cad_imp)
                 self.szProyeccionPrincipal.Add(self.impresion,1,wx.EXPAND|wx.ALL,10)
                 self.SetSizer(self.szProyeccionPrincipal)
+                os.system("pause")
         else:
             print("Faltan argumentos")
     def realizarConsulta(self,event):
@@ -331,3 +339,7 @@ class VentanaPrincipal(wx.Frame):
             self.mostrarProyeccion(orden)
         elif orden.find("WHERE")!=-1:
             self.mostrarSeleccion(orden)
+
+    def realizarLimpieza(self,event):
+        self.impresion.Destroy()
+        self.listaConsultas.Clear()
