@@ -261,12 +261,11 @@ class VentanaPrincipal(wx.Frame):
                 print("")
                 cad_imp = cad_imp + "\n"
                 i = i + 1
-                print(cad_imp)
-                self.impresion= wx.TextCtrl(self.contenedorSeleccion, wx.ID_ANY, size=(1200, 640),style=wx.TE_MULTILINE)
-                self.impresion.AppendText(cad_imp)
-                self.szSeleccionPrincipal.SetContainingWindow(self.panelSeleccion)
-                self.panelSeleccion.SetSizer(self.szSeleccionPrincipal)
-                os.system("pause")
+            print(cad_imp)
+            self.impresion= wx.TextCtrl(self.contenedorSeleccion, wx.ID_ANY, size=(1200, 640),style=wx.TE_MULTILINE)
+            self.impresion.AppendText(cad_imp)
+            self.szSeleccionPrincipal.SetContainingWindow(self.panelSeleccion)
+            self.panelSeleccion.SetSizer(self.szSeleccionPrincipal)
         else:
             seleccion = self.est_temp
 
@@ -329,7 +328,6 @@ class VentanaPrincipal(wx.Frame):
                 self.impresion.AppendText(cad_imp)
                 self.szProyeccionPrincipal.Add(self.impresion,1,wx.EXPAND|wx.ALL,10)
                 self.SetSizer(self.szProyeccionPrincipal)
-                os.system("pause")
         else:
             print("Faltan argumentos")
     def realizarConsulta(self,event):
