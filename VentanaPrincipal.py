@@ -13,21 +13,17 @@ class VentanaPrincipal(wx.Frame):
         notebook = wx.Notebook(self,style=wx.NB_BOTTOM)
         #DEFINIMOS LOS PANELES QUE VAMOS A USAR
         self.panelInicio = wx.Panel(notebook)
-        self.panelTabla = wx.Panel(notebook)
         self.panelSeleccion = wx.Panel(notebook)
         self.panelProyeccion = wx.Panel(notebook)
         #AGREGAMOS LOS PANELES A LAS PAGINAS
         notebook.AddPage(self.panelInicio, "CONSULTAS")
-        notebook.AddPage(self.panelTabla, "TABLA COMPLETA")
         notebook.AddPage(self.panelSeleccion, u"SELECCION")
         notebook.AddPage(self.panelProyeccion, u"PROYECCION")
         # ELEMENTOS PARA POSICIONAMIENTO EN EL RESTO DE LAS HOJAS
         # CAJAS ESTATICAS DONDE SE MOSTRARA EL CONTENIDO DE LOS QUERIES
-        self.contenedorTabla = wx.StaticBox(self.panelTabla,wx.ID_ANY,size=(1200, -1))
         self.contenedorSeleccion = wx.StaticBox(self.panelSeleccion,wx.ID_ANY,size=(1200, -1))
         self.contenedorProyeccion = wx.StaticBox(self.panelProyeccion,wx.ID_ANY,size=(1200, -1))
         # SIZERS
-        self.szTablaPrincipal = wx.BoxSizer(wx.VERTICAL)
         self.szSeleccionPrincipal = wx.BoxSizer(wx.VERTICAL)
         self.szProyeccionPrincipal = wx.BoxSizer(wx.VERTICAL)
         #CONFIGURAMOS EL SIZER PRINCIPAL
@@ -36,7 +32,6 @@ class VentanaPrincipal(wx.Frame):
         self.SetSizer(sizerPrincipal)
         #INICIALIZAMOS CADA PAGINA DE LA INTERFAZ CON SUS ATRIBUTOS CORRESPONDIENTES
         self.paginaInicio(self.panelInicio)
-        self.inicializarPaginas(self.panelTabla, self.contenedorTabla, self.szTablaPrincipal,u"")
         self.inicializarPaginas(self.panelSeleccion, self.contenedorSeleccion, self.szSeleccionPrincipal,u"")
         self.inicializarPaginas(self.panelProyeccion, self.contenedorProyeccion, self.szProyeccionPrincipal,u"")
 
