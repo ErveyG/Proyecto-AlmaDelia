@@ -52,6 +52,8 @@ class VentanaPrincipal(wx.Frame):
         #INICIAMOS CON LA PARTE GRAFICA
         informacion = wx.StaticText(panelInicio, -1,u"",wx.DefaultPosition, wx.DefaultSize, wx.ALIGN_CENTRE)
         imagen = wx.StaticBitmap(panelInicio, wx.ID_ANY, wx.Bitmap('prueba.jpg', wx.BITMAP_TYPE_ANY),size=(400,400))
+        icon = wx.Icon('icon.ico', wx.BITMAP_TYPE_ANY)
+        self.SetIcon(icon)
         #DATOS PARA EL TEXTAREA
         self.consulta = u""
         self.listaConsultas = wx.TextCtrl(contenedorInferior, style=wx.TE_MULTILINE, pos=(15, 15), size=(538, 70))
