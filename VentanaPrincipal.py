@@ -87,6 +87,7 @@ class VentanaPrincipal(wx.Frame):
         panel.SetSizer(sizer)
     ####################################################################################################################
     def mostrarSeleccion(self, orden):
+        orden = orden.replace("FROM employees", "")
         where = orden.split(" ", 1)
         seleccion = []
         seleccion.append(self.est_temp[0])
@@ -269,7 +270,9 @@ class VentanaPrincipal(wx.Frame):
     def mostrarProyeccion(self, orden):
         seleccion=self.est_temp
         orden_sin_comas = orden.replace(",", "")
+        orden_sin_comas = orden_sin_comas.replace("FROM employees", "")
         select = orden_sin_comas.split(" ")
+        print(select)
         i = 0
         proyeccion = []
         if len(select) >= 2:
@@ -292,6 +295,47 @@ class VentanaPrincipal(wx.Frame):
                 self.impresion.AppendText(cad_imp)
                 self.szProyeccionPrincipal.SetContainingWindow(self.panelProyeccion)
                 self.panelProyeccion.SetSizer(self.szSeleccionPrincipal)
+            elif select[1] == "DISTINCT":
+                print("entra")
+                kaux = select[2]
+                print(kaux)
+                j = 0
+                l = 0
+                while j < len(seleccion[0]):
+                    if seleccion[0][j] == kaux:
+                        i = 1
+                        while i < len(seleccion):
+                            band = 0
+                            h = 0
+                            while h < len(proyeccion):
+                                if proyeccion[h][0] == seleccion[i][j]:
+                                    band = 1
+                                    break
+                                h = h + 1
+                            if band == 0:
+                                proyeccion.append([])
+                                proyeccion[l].append(seleccion[i][j])
+                                l = l + 1
+                            i = i + 1
+                        break
+                    j = j + 1
+                cad_imp="DISTINCT\n"
+                i=0
+                while i < len(proyeccion):
+                    j = 0
+                    while j < len(proyeccion[0]):
+                        if (proyeccion[i][j] == ""):
+                            cad_imp = cad_imp + "NULL  |  "
+                        else:
+                            cad_imp = cad_imp + proyeccion[i][j]
+                            cad_imp = cad_imp + "  |  "
+                        j = j + 1
+                        cad_imp = cad_imp + "\n"
+                    i = i + 1
+                self.impresion = wx.TextCtrl(self.contenedorProyeccion, wx.ID_ANY, size=(1200, 640),style=wx.TE_MULTILINE)  # agregar posicion tamaño
+                self.impresion.AppendText(cad_imp)
+                self.szProyeccionPrincipal.Add(self.impresion, 1, wx.EXPAND | wx.ALL, 10)
+                self.SetSizer(self.szProyeccionPrincipal)
             else:
                 k = 1
                 while k < len(select):

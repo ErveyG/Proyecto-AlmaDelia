@@ -40,8 +40,11 @@ num_linea=leerArchivo()
 #parte del where
 orden=input("|")
 orden_sin_comas=orden.replace(",","")
+orden_sin_comas=orden_sin_comas.replace("FROM employees", "")
 select=orden_sin_comas.split(" ")
+print(select)
 orden=input("|")
+orden=orden.replace("FROM employees", "")
 where=orden.split(" ",1)
 seleccion=[]
 seleccion.append(est_temp[0])
@@ -229,6 +232,41 @@ if len(select)>=2:
                 j=j+1
             print("")
             i=i+1
+    elif select[1].find("DISTINCT") != 1:
+        kaux = select[2]
+        print(kaux)
+        j = 0
+        l=0
+        while j < len(est_temp[0]):
+            if est_temp[0][j] == kaux:
+                i = 1
+                while i < num_linea - 1:
+                    band = 0
+                    h = 0
+                    while h < len(proyeccion):
+                        if proyeccion[h][0] == est_temp[i][j]:
+                            band = 1
+                            break
+                        h = h + 1
+                    if band == 0:
+                        proyeccion.append([])
+                        proyeccion[l].append(est_temp[i][j])
+                        l=l+1
+                    i = i + 1
+            j = j + 1
+        i=0
+        print("----")
+        while i < len(proyeccion):
+            j = 0
+            while j < len(proyeccion[0]):
+                if (proyeccion[i][j] == ""):
+                    print("NULL", end=" ")
+                else:
+                    print(proyeccion[i][j], end=" ")
+                j = j + 1
+                print("")
+            i = i + 1
+        print("----")
     else:
         k=1
         while k < len(est_temp):
