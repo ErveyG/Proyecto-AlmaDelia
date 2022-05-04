@@ -2,12 +2,14 @@ import os
 
 import wx
 class VentanaPrincipal(wx.Frame):
-    def __init__(self, parent, est_temp1, num_linea1):
+    def __init__(self, parent, est_temp1, est_temp2, num_linea1, num_linea2):
         super().__init__(parent, wx.ID_ANY, "DBMS",
                          style=wx.DEFAULT_FRAME_STYLE | wx.MAXIMIZE | wx.STAY_ON_TOP | wx.NO_BORDER | wx.TAB_TRAVERSAL)
         self.consulta = ""
         self.est_temp=est_temp1
+        self.est_temp2=est_temp2
         self.num_linea=num_linea1
+        self.num_linea2 = num_linea2
         # Estructura para mostrar páginas
         #DEFINIMOS UN ESTILO DE PAGINAS, ESTILO LIBRETA PARA PODER TENER MAS ORGANIZADO NUESTRO PROYECTO
         notebook = wx.Notebook(self,style=wx.NB_BOTTOM)
@@ -87,7 +89,7 @@ class VentanaPrincipal(wx.Frame):
         panel.SetSizer(sizer)
     ####################################################################################################################
     def mostrarSeleccion(self, orden):
-        orden = orden.replace("FROM employees", "")
+        orden = orden.replace("FROM employees;", "")
         where = orden.split(" ", 1)
         seleccion = []
         seleccion.append(self.est_temp[0])
@@ -268,11 +270,12 @@ class VentanaPrincipal(wx.Frame):
             seleccion = self.est_temp
 
     def mostrarProyeccion(self, orden):
+        if orden.find("FROM departments"):
+            self.est_temp = self.est_temp2
         seleccion=self.est_temp
         orden_sin_comas = orden.replace(",", "")
-        orden_sin_comas = orden_sin_comas.replace("FROM employees", "")
+        orden_sin_comas = orden_sin_comas.replace("FROM employees;", "")
         select = orden_sin_comas.split(" ")
-        print(select)
         i = 0
         proyeccion = []
         if len(select) >= 2:
@@ -296,13 +299,14 @@ class VentanaPrincipal(wx.Frame):
                 self.szProyeccionPrincipal.SetContainingWindow(self.panelProyeccion)
                 self.panelProyeccion.SetSizer(self.szSeleccionPrincipal)
             elif select[1] == "DISTINCT":
-                print("entra")
                 kaux = select[2]
-                print(kaux)
                 j = 0
                 l = 0
                 while j < len(seleccion[0]):
                     if seleccion[0][j] == kaux:
+                        proyeccion.append([])
+                        proyeccion[l].append(seleccion[i][j])
+                        l=l+1
                         i = 1
                         while i < len(seleccion):
                             band = 0
@@ -319,8 +323,8 @@ class VentanaPrincipal(wx.Frame):
                             i = i + 1
                         break
                     j = j + 1
-                cad_imp="DISTINCT\n"
                 i=0
+                cad_imp=""
                 while i < len(proyeccion):
                     j = 0
                     while j < len(proyeccion[0]):
@@ -371,12 +375,66 @@ class VentanaPrincipal(wx.Frame):
                 self.SetSizer(self.szProyeccionPrincipal)
         else:
             print("Faltan argumentos")
+    def mostrarAmbos(self, orden):
+        print("Entra func")
+        k=1
+        posSelect=orden.find("SELECT")
+        posFrom=orden.find("FROM")
+        posWhere=orden.find("WHERE")
+        ordenSelect=orden[posSelect:posFrom]
+        ordenFrom=orden[posFrom:posWhere]
+        ordenWhere=orden[posFrom:]
+        ordenSelect=ordenSelect.replace(",", "")
+        ordenFrom=ordenFrom.replace(",","")
+        ordenWhere = ordenWhere.replace(",", "")
+        select=ordenSelect.split(" ")
+
+        ofrom=ordenFrom.split(" ")
+        where=ordenWhere.split(" ",1)
+        for i in self.est_temp[0]:
+            self.est_temp[0][i]="employees."+self.est_temp[0][i]
+        for i in self.est_temp2[0]:
+            self.est_temp2[0][i]="departments."+self.est_temp2[0][i]
+        productroCruz= []
+        productroCruz.append([])
+        productroCruz[0].extend(self.est_temp[0])
+        productroCruz[0].extend(self.est_temp2[0])
+        for i in self.est_temp:
+            for j in self.est_temp2:
+                productroCruz[k].extend(self.est_temp[i])
+                productroCruz[k].extend(self.est_temp2[j])
+                k=k+1
+        cad_imp = ""
+        i=0
+        while i < len(productroCruz):
+            j = 0
+            while j < len(productroCruz[i]):
+                if (productroCruz[i][j] == ""):
+                    cad_imp = cad_imp + "NULL  |  "
+                else:
+                    cad_imp = cad_imp + productroCruz[i][j]
+                    cad_imp = cad_imp + "  |  "
+                j = j + 1
+            cad_imp = cad_imp + "\n"
+
+            i = i + 1
+        print(productroCruz)
+        print("----")
+        print(cad_imp)
+        self.impresion = wx.TextCtrl(self.contenedorProyeccion, wx.ID_ANY, size=(1200, 640),
+                                     style=wx.TE_MULTILINE)  # agregar posicion tamaño
+        self.impresion.AppendText(cad_imp)
+        self.szProyeccionPrincipal.SetContainingWindow(self.panelProyeccion)
+        self.panelProyeccion.SetSizer(self.szSeleccionPrincipal)
     def realizarConsulta(self,event):
         event.Skip()
-        orden=self.listaConsultas.GetValue()
-        if orden.find("SELECT")!=-1:
+        orden = self.listaConsultas.GetValue()
+        print("Hola")
+        if orden.find("SELECT") != -1 & orden.find("WHERE") != -1:
+            self.mostrarAmbos(orden)
+        elif orden.find("SELECT") != -1:
             self.mostrarProyeccion(orden)
-        elif orden.find("WHERE")!=-1:
+        elif orden.find("WHERE") != -1:
             self.mostrarSeleccion(orden)
 
     def realizarLimpieza(self,event):
