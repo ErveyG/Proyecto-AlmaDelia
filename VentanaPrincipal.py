@@ -291,7 +291,6 @@ class VentanaPrincipal(wx.Frame):
                             cad_imp = cad_imp + "  |  "
                         j = j + 1
                     cad_imp = cad_imp + "\n"
-
                     i = i + 1
                 print(cad_imp)
                 self.impresion = wx.TextCtrl(self.contenedorProyeccion, wx.ID_ANY, size=(1200, 640), style=wx.TE_MULTILINE)  # agregar posicion tamaño
@@ -381,51 +380,106 @@ class VentanaPrincipal(wx.Frame):
         posSelect=orden.find("SELECT")
         posFrom=orden.find("FROM")
         posWhere=orden.find("WHERE")
-        ordenSelect=orden[posSelect:posFrom]
+        ordenSelect=orden[posSelect:posFrom-1]
         ordenFrom=orden[posFrom:posWhere]
-        ordenWhere=orden[posFrom:]
+        ordenWhere=orden[posWhere:]
         ordenSelect=ordenSelect.replace(",", "")
         ordenFrom=ordenFrom.replace(",","")
         ordenWhere = ordenWhere.replace(",", "")
         select=ordenSelect.split(" ")
-
         ofrom=ordenFrom.split(" ")
         where=ordenWhere.split(" ",1)
-        for i in self.est_temp[0]:
+        i=0
+        while i <len(self.est_temp[0]):
             self.est_temp[0][i]="employees."+self.est_temp[0][i]
-        for i in self.est_temp2[0]:
+            i=i+1
+        i=0
+        while i < len(self.est_temp2[0]):
             self.est_temp2[0][i]="departments."+self.est_temp2[0][i]
+            i=i+1
         productroCruz= []
         productroCruz.append([])
         productroCruz[0].extend(self.est_temp[0])
         productroCruz[0].extend(self.est_temp2[0])
-        for i in self.est_temp:
-            for j in self.est_temp2:
+        i = 1
+        while i < len(self.est_temp):
+            j=1
+            while j < len(self.est_temp2):
+                productroCruz.append([])
                 productroCruz[k].extend(self.est_temp[i])
                 productroCruz[k].extend(self.est_temp2[j])
                 k=k+1
+                j=j+1
+            i=i+1
+        if where[1].find('=') != -1:
+            where[1] = where[1].replace(" ", "")
+            var = where[1].split("=")
+            j = 0
+            while j < len(productroCruz[0]):
+                if productroCruz[0][j] == var[0]:
+                    pos1=j
+                if productroCruz[0][j] == var[1]:
+                    pos2=j
+                j = j + 1
+            i=1
+            seleccion=[]
+            seleccion.append(productroCruz[0])
+            while i<len(productroCruz):
+                if productroCruz[i][pos1]==productroCruz[i][pos2]:
+                    seleccion.append(productroCruz[i])
+                i=i+1
         cad_imp = ""
         i=0
-        while i < len(productroCruz):
+        while i < len(seleccion):
             j = 0
-            while j < len(productroCruz[i]):
-                if (productroCruz[i][j] == ""):
+            while j < len(seleccion[i]):
+                if (seleccion[i][j] == ""):
                     cad_imp = cad_imp + "NULL  |  "
                 else:
-                    cad_imp = cad_imp + productroCruz[i][j]
+                    cad_imp = cad_imp + seleccion[i][j]
                     cad_imp = cad_imp + "  |  "
                 j = j + 1
             cad_imp = cad_imp + "\n"
-
             i = i + 1
-        print(productroCruz)
-        print("----")
-        print(cad_imp)
-        self.impresion = wx.TextCtrl(self.contenedorProyeccion, wx.ID_ANY, size=(1200, 640),
-                                     style=wx.TE_MULTILINE)  # agregar posicion tamaño
+        self.impresion = wx.TextCtrl(self.contenedorSeleccion, wx.ID_ANY, size=(1200, 640), style=wx.TE_MULTILINE)
         self.impresion.AppendText(cad_imp)
-        self.szProyeccionPrincipal.SetContainingWindow(self.panelProyeccion)
-        self.panelProyeccion.SetSizer(self.szSeleccionPrincipal)
+        self.szSeleccionPrincipal.SetContainingWindow(self.panelSeleccion)
+        self.panelSeleccion.SetSizer(self.szSeleccionPrincipal)
+        k = 1
+        proyeccion=[]
+        print(select)
+        while k <len(select):
+            i = 1
+            j = 0
+            while j < len(seleccion[0]):
+                if seleccion[0][j] == select[k]:
+                    proyeccion.append([])
+                    proyeccion[0].append(seleccion[0][j])
+                    while i < len(seleccion):
+                        proyeccion.append([])
+                        proyeccion[i].append(seleccion[i][j])
+                        i = i + 1
+                j = j + 1
+            k = k + 1
+        cad_imp = ""
+        i = 0
+        while i < len(seleccion):
+            j = 0
+            while j < len(proyeccion[0]):
+                if (proyeccion[i][j] == ""):
+                    cad_imp = cad_imp + "NULL  |  "
+                else:
+                    cad_imp = cad_imp + proyeccion[i][j]
+                    cad_imp = cad_imp + "  |  "
+                j = j + 1
+            cad_imp = cad_imp + "\n"
+            i = i + 1
+        print(cad_imp)
+        self.impresion = wx.TextCtrl(self.contenedorProyeccion, wx.ID_ANY, size=(1200, 640),style=wx.TE_MULTILINE)  # agregar posicion tamaño
+        self.impresion.AppendText(cad_imp)
+        self.szProyeccionPrincipal.Add(self.impresion, 1, wx.EXPAND | wx.ALL, 10)
+        self.SetSizer(self.szProyeccionPrincipal)
+
     def realizarConsulta(self,event):
         event.Skip()
         orden = self.listaConsultas.GetValue()

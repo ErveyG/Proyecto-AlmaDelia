@@ -77,6 +77,7 @@ def main():
         if not linea:
             break
     est_temp.pop()
+    est_temp2.pop()
     f.close()
     #tablaEmployees = descEmployees.leerDescriptor()
     # Genera Aplicación
