@@ -483,7 +483,6 @@ class VentanaPrincipal(wx.Frame):
     def realizarConsulta(self,event):
         event.Skip()
         orden = self.listaConsultas.GetValue()
-        print("Hola")
         if orden.find("SELECT") != -1 & orden.find("WHERE") != -1:
             self.mostrarAmbos(orden)
         elif orden.find("SELECT") != -1:
