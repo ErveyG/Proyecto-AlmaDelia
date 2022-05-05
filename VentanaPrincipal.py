@@ -375,7 +375,6 @@ class VentanaPrincipal(wx.Frame):
         else:
             print("Faltan argumentos")
     def mostrarAmbos(self, orden):
-        print("Entra func")
         k=1
         posSelect=orden.find("SELECT")
         posFrom=orden.find("FROM")
